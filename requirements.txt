@@ -1,0 +1,8 @@
+# FastAPI with all optional dependencies
+fastapi[all]==0.103.1  # Replace with the desired version
+
+# psycopg with binary and connection pooling support
+psycopg==3.2.4  # Replace with the desired version
+
+# Other dependencies (examples)
+uvicorn[standard]==0.23.2  # ASGI server for FastAPI
