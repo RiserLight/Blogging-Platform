@@ -1,0 +1,39 @@
+1. Blogs :-
+- blog_id
+- title
+- content
+- images
+- created_at
+- updated_at
+- views
+- likes
+- dislikes
+- created_by (user_id of user who created this)
+
+2. Tags:
+- blog_id
+- tag_id
+- tag_name
+
+3. Rate limiting
+4. Circuit breaker
+5. Caching
+6. Idempotency
+7. Load Testing
+8. Analytics for post
+9. Analytics on user
+10. Comments
+11. top posts
+12. follower/following feature
+13. Notification on new post for subscribed user.
+14. Making post premium
+15. If user wants he can pay for post or to the application
+16. Payment integration
+
+17. User
+- user_id
+- password
+- First name
+- Last name
+- created_on
+- updated_on

@@ -150,3 +150,6 @@ CRITICAL=50
 9. ASGI and WSGI
 
 10. https://www.youtube.com/watch?v=Ep6XExNOPSc
+
+11. https://roadmap.sh/backend/project-ideas
+
