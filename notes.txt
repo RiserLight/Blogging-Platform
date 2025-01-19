@@ -1,0 +1,152 @@
+1. host="0.0.0.0":
+This binds the server to all network interfaces on the machine.
+The application will be accessible from any device that can reach the server's machine IP address
+
+2. The difference between `logging.basicConfig(level=logging.INFO)` and `logger = logging.getLogger("uvicorn")` lies in their purpose and scope. Here's a detailed explanation:
+
+### 1. **`logging.basicConfig(level=logging.INFO)`**
+   - **Purpose**: Configures the root logger, which is the default logger in Python's `logging` module.
+   - **Effect**: 
+     - Sets the logging level for the root logger to `INFO`, meaning that log messages with a severity level of `INFO` or higher (e.g., `WARNING`, `ERROR`, `CRITICAL`) will be displayed.
+     - Configures basic settings such as log level, format, and output stream for the entire logging system unless overridden by other loggers or handlers.
+   - **Scope**: Applies globally to all loggers unless they have their own configurations.
+   - **Example**:
+     ```python
+     import logging
+     
+     logging.basicConfig(level=logging.INFO)
+     logging.info("This is an INFO message")  # Logged
+     logging.debug("This is a DEBUG message")  # Not logged
+     ```
+
+### 2. **`logger = logging.getLogger("uvicorn")`**
+   - **Purpose**: Retrieves (or creates if it doesn't already exist) a named logger with the identifier `"uvicorn"`.
+   - **Effect**: 
+     - Allows you to customize logging behavior specifically for the `"uvicorn"` logger without affecting the root logger or other loggers.
+     - The logging level and handlers of this logger can be set independently of the root logger.
+   - **Scope**: Limited to the logger with the name `"uvicorn"`.
+   - **Example**:
+     ```python
+     import logging
+     
+     logger = logging.getLogger("uvicorn")
+     logger.setLevel(logging.DEBUG)  # Custom level for the "uvicorn" logger
+     logger.debug("This is a DEBUG message")  # Logged because the level is DEBUG
+     ```
+
+### Key Differences:
+| **Feature**             | **`basicConfig()`**                             | **`getLogger("uvicorn")`**                      |
+|--------------------------|------------------------------------------------|------------------------------------------------|
+| **Scope**               | Global (affects the root logger)               | Specific to the `"uvicorn"` logger             |
+| **Default Use Case**    | Setting general logging configuration           | Customizing logging for a specific logger      |
+| **Level Setting**       | Sets the default level for all loggers unless explicitly overridden | Sets the level for the named logger only       |
+| **Custom Configuration**| Limited (e.g., cannot add handlers directly)    | Fully customizable (handlers, formatters, etc.)|
+
+### Combined Example:
+Here’s how they interact:
+```python
+import logging
+
+# Configure the root logger
+logging.basicConfig(level=logging.WARNING)
+
+# Create a logger for "uvicorn"
+logger = logging.getLogger("uvicorn")
+logger.setLevel(logging.INFO)  # Set a specific level for "uvicorn"
+
+# Root logger behavior
+logging.info("Root INFO message")  # Not logged (root level is WARNING)
+logging.warning("Root WARNING message")  # Logged
+
+# Uvicorn logger behavior
+logger.info("Uvicorn INFO message")  # Logged
+logger.debug("Uvicorn DEBUG message")  # Not logged (level is INFO)
+```
+
+### When to Use Each:
+- Use `logging.basicConfig()` for general, application-wide logging settings.
+- Use `logging.getLogger(name)` to create or customize loggers for specific modules, libraries, or parts of your application (e.g., `"uvicorn"` for server logs).
+
+3. Both `os.environ.get` and `os.getenv` are used to retrieve environment variables in Python, but they differ in a few subtle ways related to their implementation and usage.
+
+### **1. `os.environ.get`**
+- **What it is**: A method of the `os.environ` dictionary-like object.
+- **Usage**: It retrieves the value of an environment variable, similar to accessing a dictionary but with an optional default value.
+- **Behavior**:
+  - If the environment variable exists, its value is returned.
+  - If the environment variable doesn't exist, the provided default value is returned (or `None` if no default is specified).
+
+```python
+import os
+
+# Assuming MY_VAR exists
+os.environ["MY_VAR"] = "123"
+print(os.environ.get("MY_VAR"))  # Output: "123"
+
+# If MY_VAR does not exist
+print(os.environ.get("NON_EXISTENT_VAR", "default"))  # Output: "default"
+```
+
+- **Special Features**: You can also access `os.environ` like a dictionary (`os.environ["VAR_NAME"]`), but this raises a `KeyError` if the variable doesn't exist, unlike `os.environ.get`.
+
+---
+
+### **2. `os.getenv`**
+- **What it is**: A standalone function in the `os` module specifically for retrieving environment variables.
+- **Usage**: It retrieves the value of an environment variable in the same way as `os.environ.get`, with an optional default value.
+- **Behavior**:
+  - Similar to `os.environ.get`, it returns the value of the variable if it exists.
+  - If the variable doesn’t exist, it returns the specified default value or `None`.
+
+```python
+import os
+
+# Assuming MY_VAR exists
+os.environ["MY_VAR"] = "123"
+print(os.getenv("MY_VAR"))  # Output: "123"
+
+# If MY_VAR does not exist
+print(os.getenv("NON_EXISTENT_VAR", "default"))  # Output: "default"
+```
+
+---
+
+### **Key Differences**:
+
+| Feature                     | `os.environ.get`              | `os.getenv`                   |
+|-----------------------------|-------------------------------|-------------------------------|
+| **Source**                  | Accesses the `os.environ` dictionary | Standalone function in the `os` module |
+| **Customization**           | Can also manipulate environment variables (e.g., `os.environ["VAR"] = "value"`) | Read-only access (cannot set variables) |
+| **Use Case**                | Useful when you need more control over `os.environ` | Simpler for retrieving variables only |
+| **Performance**             | Slightly slower due to dictionary lookup and method call overhead | Slightly faster, as it's a direct function call |
+| **Readability**             | Requires importing and accessing `os.environ.get` | Shorter, cleaner syntax for retrieval |
+
+---
+
+### **When to Use Which?**
+- Use `os.getenv` for simple, clean, and direct retrieval of environment variables.
+- Use `os.environ.get` if you're already working with `os.environ` (e.g., setting or modifying variables) or need a dictionary-like interface.
+
+Both are valid and equivalent for retrieving environment variables in most scenarios.
+
+4. https://medium.com/@benshearlaw/asynchronous-postgres-with-python-fastapi-and-psycopg-3-fafa5faa2c08
+
+5. https://www.psycopg.org/psycopg3/docs/api/pool.html
+
+6. https://www.youtube.com/watch?v=tGD3653BrZ8
+
+7. You can declare a parameter in a path operation function or dependency to be of type Request and then you can access the raw request object directly, without any validation, etc.
+
+8. Python has six log levels with each one assigned a specific integer indicating the severity of the log:
+
+NOTSET=0
+DEBUG=10
+INFO=20
+WARN=30
+ERROR=40
+CRITICAL=50
+
+
+9. ASGI and WSGI
+
+10. https://www.youtube.com/watch?v=Ep6XExNOPSc
