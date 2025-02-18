@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  blog:
+    build:
+      context: .
+    container_name: blogging_app
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Mysql"
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: 5432
+
+    
+
+
+
